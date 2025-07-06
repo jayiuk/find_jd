@@ -1,6 +1,9 @@
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain_community.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
+import os
+from dotenv import load_dotenv
+from retriever import Retriever
 
 template = """
             당신은 이력서 혹은 자기소개서를 수정해주는 코치입니다.
@@ -15,3 +18,13 @@ template = """
             유저의 이력서를 수정할 땐 무조건 다음의 retrieved_context를 참고해야 합니다
 
 """
+
+class JDChain():
+    def __init__(self, llm):
+        self.llm = llm
+        self.retriever = Retriever()
+        self.prompt = ChatPromptTemplate.from_messages([
+            ("system", template),
+            ("human", "{input}")
+        ])
+        
